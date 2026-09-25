@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Jobs — Hirely{% endblock %}
+
+{% block content %}
+
+<section class="jobs-page">
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="jobs-header reveal">
+
+            <div>
+                <span class="eyebrow">
+                    <i class="bi bi-compass"></i>
+                    Explore opportunities
+                </span>
+
+                <h1>
+                    Find work that
+                    <span>moves you forward.</span>
+                </h1>
+
+                <p>
+                    Discover roles from companies looking for their next great hire.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Search -->
+        <form method="GET" class="job-search reveal">
+
+            <div class="search-input">
+                <i class="bi bi-search"></i>
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ query }}"
+                    placeholder="Search jobs, companies or locations..."
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Search
+                <i class="bi bi-arrow-right"></i>
+            </button>
+
+        </form>
+
+
+        <!-- Results heading -->
+        <div class="jobs-result-header">
+
+            <div>
+                <span class="eyebrow">Available now</span>
+
+                <h2>
+                    {% if query %}
+                        Results for "{{ query }}"
+                    {% else %}
+                        Latest opportunities
+                    {% endif %}
+                </h2>
+            </div>
+
+            <span class="job-count">
+                {{ jobs|length }} job{{ jobs|length|pluralize }}
+            </span>
+
+        </div>
+
+
+        <!-- Job cards -->
+        {% if jobs %}
+
+            <div class="jobs-grid">
+
+                {% for job in jobs %}
+
+                    <article class="job-card reveal">
+
+                        <div class="job-card-top">
+
+                            <div class="company-logo">
+                                {{ job.company|first|upper }}
+                            </div>
+
+                            <span class="job-type">
+                                {{ job.job_type }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="job-card-content">
+
+                            <h3>{{ job.title }}</h3>
+
+                            <p class="company-name">
+                                {{ job.company }}
+                            </p>
+
+                            <div class="job-meta">
+
+                                <span>
+                                    <i class="bi bi-geo-alt"></i>
+                                    {{ job.location }}
+                                </span>
+
+                                {% if job.salary %}
+                                    <span>
+                                        <i class="bi bi-wallet2"></i>
+                                        {{ job.salary }}
+                                    </span>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="job-card-bottom">
+
+                            <span class="posted-date">
+                                <i class="bi bi-clock"></i>
+                                Recently posted
+                            </span>
+
+                            <a
+                                href="{% url 'job_detail' job.id %}"
+                                class="job-arrow"
+                                aria-label="View {{ job.title }}"
+                            >
+                                <i class="bi bi-arrow-up-right"></i>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state reveal">
+
+                <div class="empty-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <h3>No jobs found</h3>
+
+                <p>
+                    Try searching for a different role, company or location.
+                </p>
+
+                {% if query %}
+                    <a href="{% url 'job_list' %}" class="btn btn-primary">
+                        View all jobs
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

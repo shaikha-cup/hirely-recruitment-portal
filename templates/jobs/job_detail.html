@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} — Hirely{% endblock %}
+
+{% block content %}
+
+<section class="job-detail-page">
+
+    <div class="container">
+
+        <a href="{% url 'job_list' %}" class="back-link">
+            <i class="bi bi-arrow-left"></i>
+            Back to jobs
+        </a>
+
+        <div class="job-detail-layout">
+
+            <!-- Main content -->
+            <main class="job-detail-main">
+
+                <div class="job-detail-hero">
+
+                    <div class="company-logo large">
+                        {{ job.company|first|upper }}
+                    </div>
+
+                    <div>
+                        <span class="job-type">
+                            {{ job.job_type }}
+                        </span>
+
+                        <h1>{{ job.title }}</h1>
+
+                        <p class="detail-company">
+                            {{ job.company }}
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="detail-meta">
+
+                    <span>
+                        <i class="bi bi-geo-alt"></i>
+                        {{ job.location }}
+                    </span>
+
+                    {% if job.salary %}
+                    <span>
+                        <i class="bi bi-wallet2"></i>
+                        {{ job.salary }}
+                    </span>
+                    {% endif %}
+
+                    <span>
+                        <i class="bi bi-briefcase"></i>
+                        {{ job.job_type }}
+                    </span>
+
+                </div>
+
+
+                <div class="job-description">
+
+                    <section>
+                        <h2>About the role</h2>
+
+                        <p>
+                            {{ job.description|linebreaksbr }}
+                        </p>
+                    </section>
+
+
+                    <section>
+                        <h2>What we're looking for</h2>
+
+                        <div class="requirements">
+                            {{ job.requirements|linebreaksbr }}
+                        </div>
+                    </section>
+
+                </div>
+
+            </main>
+
+
+            <!-- Apply card -->
+            <aside class="apply-card">
+
+                <div>
+                    <span class="eyebrow">Ready to apply?</span>
+
+                    <h2>
+                        Take the next step.
+                    </h2>
+
+                    <p>
+                        Submit your application and let the hiring team
+                        know you're interested.
+                    </p>
+                </div>
+
+
+                {% if already_applied %}
+
+                    <div class="already-applied">
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        <div>
+                            <strong>Application submitted</strong>
+
+                            <span>
+                                You've already applied for this role.
+                            </span>
+                        </div>
+                    </div>
+
+                    <a
+                        href="{% url 'candidate_dashboard' %}"
+                        class="btn btn-secondary full-width"
+                    >
+                        View application
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                {% elif request.user.is_authenticated %}
+
+                    <a
+                        href="{% url 'apply_job' job.id %}"
+                        class="btn btn-primary full-width"
+                    >
+                        Apply for this role
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{% url 'login' %}"
+                        class="btn btn-primary full-width"
+                    >
+                        Log in to apply
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                    <p class="apply-note">
+                        Don't have an account?
+                        <a href="{% url 'register' %}">
+                            Create one
+                        </a>
+                    </p>
+
+                {% endif %}
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

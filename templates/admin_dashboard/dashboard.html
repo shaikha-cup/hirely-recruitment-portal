@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+
+{% block title %}Recruiter Dashboard — Hirely{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="admin-header reveal">
+
+            <div>
+                <span class="eyebrow">
+                    <i class="bi bi-grid-1x2"></i>
+                    Recruiter workspace
+                </span>
+
+                <h1>
+                    Hiring,
+                    <span>simplified.</span>
+                </h1>
+
+                <p>
+                    Manage your openings, review candidates and keep hiring
+                    moving from one place.
+                </p>
+            </div>
+
+            <a href="{% url 'job_list' %}" class="btn btn-secondary">
+                View marketplace
+                <i class="bi bi-arrow-up-right"></i>
+            </a>
+
+        </div>
+
+
+        <!-- Statistics -->
+        <div class="admin-stats">
+
+            <div class="admin-stat reveal">
+                <div class="admin-stat-icon">
+                    <i class="bi bi-briefcase"></i>
+                </div>
+
+                <div>
+                    <span>Total jobs</span>
+                    <strong>{{ job_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="admin-stat reveal">
+                <div class="admin-stat-icon">
+                    <i class="bi bi-check2-circle"></i>
+                </div>
+
+                <div>
+                    <span>Active jobs</span>
+                    <strong>{{ active_job_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="admin-stat reveal">
+                <div class="admin-stat-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+
+                <div>
+                    <span>Applications</span>
+                    <strong>{{ application_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="admin-stat reveal">
+                <div class="admin-stat-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+
+                <div>
+                    <span>Shortlisted</span>
+                    <strong>{{ shortlisted_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="admin-stat reveal">
+                <div class="admin-stat-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+
+                <div>
+                    <span>Interviews</span>
+                    <strong>{{ interview_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="admin-stat reveal">
+                <div class="admin-stat-icon">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+
+                <div>
+                    <span>Rejected</span>
+                    <strong>{{ rejected_count }}</strong>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Candidate Applications -->
+        <div class="admin-section reveal">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        Candidate pipeline
+                    </span>
+
+                    <h2>
+                        Recent applications
+                    </h2>
+                </div>
+
+                <span class="admin-count">
+                    {{ application_count }} total
+                </span>
+
+            </div>
+
+
+            {% if applications %}
+
+                <div class="admin-table-wrap">
+
+                    <table class="admin-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Position</th>
+                                <th>Applied</th>
+                                <th>Status</th>
+                                <th>CV</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for application in applications %}
+
+                            <tr>
+
+                                <!-- Candidate -->
+                                <td>
+
+                                    <div class="candidate-cell">
+
+                                        <div class="candidate-avatar">
+
+                                            {{ application.candidate.first_name|first|default:application.candidate.username|first|upper }}
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <strong>
+                                                {{ application.candidate.get_full_name|default:application.candidate.username }}
+                                            </strong>
+
+                                            <span>
+                                                {{ application.candidate.email }}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Position -->
+                                <td>
+
+                                    <div class="position-cell">
+
+                                        <strong>
+                                            {{ application.job.title }}
+                                        </strong>
+
+                                        <span>
+                                            {{ application.job.company }}
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Date -->
+                                <td>
+
+                                    <span class="date-cell">
+
+                                        {{ application.applied_at|date:"M d, Y" }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Status -->
+                                <td>
+
+                                    <form
+                                        method="POST"
+                                        action="{% url 'update_application_status' application.id %}"
+                                        class="status-form"
+                                    >
+
+                                        {% csrf_token %}
+
+
+                                        <select
+                                            name="status"
+                                            class="status-select status-{{ application.status|lower }}"
+                                            onchange="this.form.submit()"
+                                            aria-label="Update application status"
+                                        >
+
+                                            <option
+                                                value="Applied"
+                                                {% if application.status == "Applied" %}selected{% endif %}
+                                            >
+                                                Applied
+                                            </option>
+
+
+                                            <option
+                                                value="Shortlisted"
+                                                {% if application.status == "Shortlisted" %}selected{% endif %}
+                                            >
+                                                Shortlisted
+                                            </option>
+
+
+                                            <option
+                                                value="Interview"
+                                                {% if application.status == "Interview" %}selected{% endif %}
+                                            >
+                                                Interview
+                                            </option>
+
+
+                                            <option
+                                                value="Rejected"
+                                                {% if application.status == "Rejected" %}selected{% endif %}
+                                            >
+                                                Rejected
+                                            </option>
+
+                                        </select>
+
+                                    </form>
+
+                                </td>
+
+
+                                <!-- CV -->
+                                <td>
+
+                                    <a
+                                        href="{{ application.cv.url }}"
+                                        target="_blank"
+                                        class="cv-button"
+                                    >
+
+                                        <i class="bi bi-file-earmark-text"></i>
+
+                                        View CV
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="admin-empty">
+
+                    <div>
+                        <i class="bi bi-inbox"></i>
+                    </div>
+
+                    <h3>
+                        No applications yet
+                    </h3>
+
+                    <p>
+                        Candidate applications will appear here.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Job Openings -->
+        <div class="admin-section reveal">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        Openings
+                    </span>
+
+                    <h2>
+                        Job openings
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="/admin/portal/job/add/"
+                    class="btn btn-primary"
+                >
+
+                    Add job
+
+                    <i class="bi bi-plus-lg"></i>
+
+                </a>
+
+            </div>
+
+
+            <div class="admin-jobs-grid">
+
+                {% for job in jobs %}
+
+                <div class="admin-job-card">
+
+                    <div class="admin-job-top">
+
+                        <div class="company-logo">
+
+                            {{ job.company|first|upper }}
+
+                        </div>
+
+
+                        {% if job.is_active %}
+
+                            <span class="active-pill">
+
+                                <span></span>
+
+                                Active
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="inactive-pill">
+
+                                Inactive
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <h3>
+                        {{ job.title }}
+                    </h3>
+
+
+                    <p>
+
+                        {{ job.company }}
+
+                        <span>•</span>
+
+                        {{ job.location }}
+
+                    </p>
+
+
+                    <div class="admin-job-footer">
+
+                        <span>
+                            {{ job.job_type }}
+                        </span>
+
+
+                        <a
+                            href="/admin/portal/job/{{ job.id }}/change/"
+                        >
+
+                            Manage
+
+                            <i class="bi bi-arrow-up-right"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                {% empty %}
+
+                    <div class="admin-empty">
+
+                        <div>
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+
+                        <h3>
+                            No jobs yet
+                        </h3>
+
+                        <p>
+                            Create your first job opening to get started.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

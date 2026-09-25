@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Log In — Hirely{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+    <div class="auth-shell">
+
+        <!-- LEFT PANEL -->
+        <div class="auth-brand-panel">
+
+            <a href="/" class="brand">
+                <span class="brand-mark">
+                    <i class="bi bi-stars"></i>
+                </span>
+                <span>Hirely</span>
+            </a>
+
+            <div class="auth-brand-content">
+
+                <span class="eyebrow">
+                    <i class="bi bi-stars"></i>
+                    Welcome back
+                </span>
+
+                <h1>
+                    Ready for your
+                    <span>next move?</span>
+                </h1>
+
+                <p>
+                    Sign in to continue exploring opportunities,
+                    manage applications and track your progress.
+                </p>
+
+                <div class="auth-benefits">
+
+                    <div class="auth-benefit">
+                        <span class="benefit-icon">
+                            <i class="bi bi-briefcase"></i>
+                        </span>
+
+                        <div>
+                            <strong>Explore new roles</strong>
+                            <small>Find opportunities that fit you.</small>
+                        </div>
+                    </div>
+
+                    <div class="auth-benefit">
+                        <span class="benefit-icon">
+                            <i class="bi bi-send-check"></i>
+                        </span>
+
+                        <div>
+                            <strong>Manage applications</strong>
+                            <small>Keep everything in one place.</small>
+                        </div>
+                    </div>
+
+                    <div class="auth-benefit">
+                        <span class="benefit-icon">
+                            <i class="bi bi-bar-chart"></i>
+                        </span>
+
+                        <div>
+                            <strong>Track your journey</strong>
+                            <small>Stay updated on every application.</small>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="auth-panel-footer">
+                <span>Built for ambitious people.</span>
+                <span>© 2026 Hirely</span>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT PANEL -->
+        <div class="auth-form-panel">
+
+            <div class="auth-form-header">
+
+                <span class="mobile-auth-logo">
+                    <i class="bi bi-stars"></i>
+                </span>
+
+                <span class="eyebrow">Sign in</span>
+
+                <h2>Welcome back.</h2>
+
+                <p>
+                    Don't have an account?
+                    <a href="{% url 'register' %}">Create one</a>
+                </p>
+
+            </div>
+
+
+            <form method="POST" class="auth-form">
+
+                {% csrf_token %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="form-alert {{ message.tags }}">
+                            <i class="bi bi-info-circle"></i>
+
+                            <div>
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="input-with-icon">
+                        <i class="bi bi-at"></i>
+
+                        <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            class="form-input"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-input">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            class="form-input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="passwordToggle"
+                            aria-label="Show password"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="btn btn-primary auth-submit">
+
+                    Log in to Hirely
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            <p class="auth-legal">
+                Your account information is securely handled by
+                Django's authentication system.
+            </p>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+    const passwordToggle = document.getElementById("passwordToggle");
+    const passwordInput = document.getElementById("password");
+
+    if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener("click", () => {
+
+            const isPassword = passwordInput.type === "password";
+
+            passwordInput.type = isPassword ? "text" : "password";
+
+            passwordToggle.innerHTML = isPassword
+                ? '<i class="bi bi-eye-slash"></i>'
+                : '<i class="bi bi-eye"></i>';
+
+        });
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Apply — {{ job.title }} | Hirely{% endblock %}
+
+{% block content %}
+
+<section class="apply-page">
+
+    <div class="container">
+
+        <a href="{% url 'job_detail' job.id %}" class="back-link">
+            <i class="bi bi-arrow-left"></i>
+            Back to job
+        </a>
+
+        <div class="apply-layout">
+
+            <!-- LEFT SIDE -->
+            <div class="apply-intro">
+
+                <span class="eyebrow">
+                    <i class="bi bi-send"></i>
+                    Application
+                </span>
+
+                <h1>
+                    Apply for
+                    <span>{{ job.title }}</span>
+                </h1>
+
+                <p class="apply-subtitle">
+                    Take the next step in your career. Submit your application
+                    and let the hiring team know why you're a great fit.
+                </p>
+
+                <div class="apply-job-summary">
+
+                    <div class="company-logo">
+                        {{ job.company|slice:":1"|upper }}
+                    </div>
+
+                    <div>
+                        <strong>{{ job.title }}</strong>
+                        <span>{{ job.company }}</span>
+                    </div>
+
+                </div>
+
+                <div class="apply-tips">
+
+                    <div class="apply-tip">
+                        <i class="bi bi-file-earmark-check"></i>
+                        <div>
+                            <strong>Upload your CV</strong>
+                            <span>PDF, DOC or DOCX · Max 5 MB</span>
+                        </div>
+                    </div>
+
+                    <div class="apply-tip">
+                        <i class="bi bi-chat-square-text"></i>
+                        <div>
+                            <strong>Add a cover letter</strong>
+                            <span>Tell the team what makes you a good fit.</span>
+                        </div>
+                    </div>
+
+                    <div class="apply-tip">
+                        <i class="bi bi-shield-check"></i>
+                        <div>
+                            <strong>Your application is secure</strong>
+                            <span>Your information is only shared with the hiring team.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+            <div class="apply-card">
+
+                <div class="apply-card-header">
+                    <div>
+                        <span class="form-step">STEP 1 OF 1</span>
+                        <h2>Submit your application</h2>
+                    </div>
+
+                    <div class="apply-icon">
+                        <i class="bi bi-paperclip"></i>
+                    </div>
+                </div>
+
+
+                <form method="POST"
+                      enctype="multipart/form-data"
+                      class="application-form">
+
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-alert">
+                            <i class="bi bi-exclamation-circle"></i>
+
+                            <div>
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                    <!-- CV -->
+                    <div class="form-group">
+
+                        <label for="{{ form.cv.id_for_label }}">
+                            CV / Resume
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="file-upload">
+
+                            {{ form.cv }}
+
+                            <div class="file-upload-content">
+                                <div class="file-upload-icon">
+                                    <i class="bi bi-cloud-arrow-up"></i>
+                                </div>
+
+                                <strong>Choose your CV</strong>
+
+                                <span>
+                                    Drag & drop or click to browse
+                                </span>
+
+                                <small>
+                                    PDF, DOC or DOCX · Up to 5 MB
+                                </small>
+                            </div>
+
+                        </div>
+
+                        {% for error in form.cv.errors %}
+                            <p class="field-error">
+                                <i class="bi bi-exclamation-circle"></i>
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- COVER LETTER -->
+                    <div class="form-group">
+
+                        <div class="label-row">
+                            <label for="{{ form.cover_letter.id_for_label }}">
+                                Cover letter
+                            </label>
+
+                            <span class="optional">Optional</span>
+                        </div>
+
+                        {{ form.cover_letter }}
+
+                        {% for error in form.cover_letter.errors %}
+                            <p class="field-error">
+                                <i class="bi bi-exclamation-circle"></i>
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary apply-submit">
+
+                        Submit application
+
+                        <i class="bi bi-arrow-up-right"></i>
+
+                    </button>
+
+                    <p class="form-note">
+                        <i class="bi bi-lock"></i>
+                        Your application details are protected.
+                    </p>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

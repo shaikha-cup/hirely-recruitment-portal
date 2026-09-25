@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account — Hirely{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+    <div class="auth-shell">
+
+        <div class="auth-brand-panel">
+            <a href="/" class="brand">
+                <span class="brand-mark">
+                    <i class="bi bi-stars"></i>
+                </span>
+                <span>Hirely</span>
+            </a>
+
+            <div class="auth-brand-content">
+                <span class="eyebrow">
+                    <i class="bi bi-sparkles"></i>
+                    Start your journey
+                </span>
+
+                <h1>
+                    Your next
+                    <span>opportunity</span>
+                    starts here.
+                </h1>
+
+                <p>
+                    Create your Hirely account and discover roles
+                    that actually match where you want to go.
+                </p>
+
+                <div class="auth-benefits">
+                    <div class="auth-benefit">
+                        <span class="benefit-icon">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <div>
+                            <strong>Discover opportunities</strong>
+                            <small>Explore jobs built for your next move.</small>
+                        </div>
+                    </div>
+
+                    <div class="auth-benefit">
+                        <span class="benefit-icon">
+                            <i class="bi bi-file-earmark-person"></i>
+                        </span>
+                        <div>
+                            <strong>Apply effortlessly</strong>
+                            <small>Keep your applications organized.</small>
+                        </div>
+                    </div>
+
+                    <div class="auth-benefit">
+                        <span class="benefit-icon">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </span>
+                        <div>
+                            <strong>Track your progress</strong>
+                            <small>Know where every application stands.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-panel-footer">
+                <span>Built for ambitious people.</span>
+                <span>© 2026 Hirely</span>
+            </div>
+        </div>
+
+
+        <div class="auth-form-panel">
+
+            <div class="auth-form-header">
+                <span class="mobile-auth-logo">
+                    <i class="bi bi-stars"></i>
+                </span>
+
+                <span class="eyebrow">Create account</span>
+
+                <h2>Let's get you started.</h2>
+
+                <p>
+                    Already have an account?
+                    <a href="{% url 'login' %}">Log in</a>
+                </p>
+            </div>
+
+
+            <form method="POST" class="auth-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-alert error">
+                        <i class="bi bi-exclamation-circle"></i>
+                        <div>
+                            {{ form.non_field_errors }}
+                        </div>
+                    </div>
+                {% endif %}
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="{{ form.first_name.id_for_label }}">
+                            First name
+                        </label>
+
+                        {{ form.first_name }}
+
+                        {% for error in form.first_name.errors %}
+                            <small class="field-error">
+                                {{ error }}
+                            </small>
+                        {% endfor %}
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="{{ form.last_name.id_for_label }}">
+                            Last name
+                        </label>
+
+                        {{ form.last_name }}
+
+                        {% for error in form.last_name.errors %}
+                            <small class="field-error">
+                                {{ error }}
+                            </small>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">
+                        Username
+                    </label>
+
+                    <div class="input-with-icon">
+                        <i class="bi bi-at"></i>
+                        {{ form.username }}
+                    </div>
+
+                    {% for error in form.username.errors %}
+                        <small class="field-error">
+                            {{ error }}
+                        </small>
+                    {% endfor %}
+                </div>
+
+
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">
+                        Email address
+                    </label>
+
+                    <div class="input-with-icon">
+                        <i class="bi bi-envelope"></i>
+                        {{ form.email }}
+                    </div>
+
+                    {% for error in form.email.errors %}
+                        <small class="field-error">
+                            {{ error }}
+                        </small>
+                    {% endfor %}
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="{{ form.password.id_for_label }}">
+                            Password
+                        </label>
+
+                        {{ form.password }}
+
+                        {% for error in form.password.errors %}
+                            <small class="field-error">
+                                {{ error }}
+                            </small>
+                        {% endfor %}
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="{{ form.confirm_password.id_for_label }}">
+                            Confirm password
+                        </label>
+
+                        {{ form.confirm_password }}
+
+                        {% for error in form.confirm_password.errors %}
+                            <small class="field-error">
+                                {{ error }}
+                            </small>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+
+                <div class="password-note">
+                    <i class="bi bi-shield-check"></i>
+                    Your password must contain at least 8 characters.
+                </div>
+
+
+                <button type="submit" class="btn btn-primary auth-submit">
+                    Create my account
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+
+            </form>
+
+
+            <p class="auth-legal">
+                By creating an account, you agree to use Hirely
+                responsibly and provide accurate information.
+            </p>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

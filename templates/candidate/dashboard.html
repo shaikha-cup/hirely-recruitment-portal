@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — Hirely{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="container">
+
+        <!-- Welcome -->
+        <div class="dashboard-header reveal">
+
+            <div>
+                <span class="eyebrow">
+                    <i class="bi bi-stars"></i>
+                    Candidate dashboard
+                </span>
+
+                <h1>
+                    Welcome back,
+                    <span>{{ request.user.first_name|default:request.user.username }}</span>.
+                </h1>
+
+                <p>
+                    Keep track of your applications and discover your next opportunity.
+                </p>
+            </div>
+
+            <a href="/" class="btn btn-primary">
+                Explore jobs
+                <i class="bi bi-arrow-up-right"></i>
+            </a>
+
+        </div>
+
+
+        <!-- Stats -->
+<div class="dashboard-stats">
+
+    <div class="dashboard-stat reveal">
+        <div class="stat-icon">
+            <i class="bi bi-send-check"></i>
+        </div>
+
+        <div>
+            <span>Total applications</span>
+            <strong>{{ application_count }}</strong>
+        </div>
+    </div>
+
+
+    <div class="dashboard-stat reveal">
+        <div class="stat-icon">
+            <i class="bi bi-hourglass-split"></i>
+        </div>
+
+        <div>
+            <span>Applied</span>
+            <strong>{{ applied_count }}</strong>
+        </div>
+    </div>
+
+
+    <div class="dashboard-stat reveal">
+        <div class="stat-icon">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <div>
+            <span>Shortlisted</span>
+            <strong>{{ shortlisted_count }}</strong>
+        </div>
+    </div>
+
+
+    <div class="dashboard-stat reveal">
+        <div class="stat-icon">
+            <i class="bi bi-calendar-check"></i>
+        </div>
+
+        <div>
+            <span>Interview</span>
+            <strong>{{ interview_count }}</strong>
+        </div>
+    </div>
+
+
+    <div class="dashboard-stat reveal">
+        <div class="stat-icon">
+            <i class="bi bi-x-circle"></i>
+        </div>
+
+        <div>
+            <span>Rejected</span>
+            <strong>{{ rejected_count }}</strong>
+        </div>
+    </div>
+
+</div>
+
+
+        <!-- Applications -->
+        <div class="dashboard-section reveal">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">Your activity</span>
+                    <h2>Recent applications</h2>
+                </div>
+
+                <a href="/" class="text-link">
+                    Find more jobs
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+            </div>
+
+
+            {% if applications %}
+
+                <div class="application-list">
+
+                    {% for application in applications %}
+
+                        <article class="application-card">
+
+                            <div class="application-main">
+
+                                <div class="company-logo">
+                                    {{ application.job.company|first|upper }}
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        {{ application.job.title }}
+                                    </h3>
+
+                                    <p>
+                                        {{ application.job.company }}
+                                        <span>•</span>
+                                        {{ application.job.location }}
+                                    </p>
+
+                                    <small>
+                                        Applied {{ application.applied_at|date:"M d, Y" }}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="application-status status-{{ application.status|lower }}">
+
+                                {% if application.status == "Applied" %}
+                                    <i class="bi bi-clock"></i>
+                                {% elif application.status == "Shortlisted" %}
+                                    <i class="bi bi-stars"></i>
+                                {% elif application.status == "Interview" %}
+                                    <i class="bi bi-calendar-check"></i>
+                                {% else %}
+                                    <i class="bi bi-x-circle"></i>
+                                {% endif %}
+
+                                {{ application.status }}
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+
+                    <h3>No applications yet</h3>
+
+                    <p>
+                        Your next opportunity could be one click away.
+                    </p>
+
+                    <a href="/" class="btn btn-primary">
+                        Explore available jobs
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
